@@ -1,0 +1,31 @@
+name: script_learner
+description: App Android per studiare copioni con TTS, STT e punteggi
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  file_picker: ^8.0.3
+  flutter_tts: ^3.8.3
+  speech_to_text: ^6.6.2
+  shared_preferences: ^2.3.2
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  archive: ^3.6.1
+  xml: ^6.5.0
+  pdf_text: ^1.0.0
+  intl: ^0.19.0
+  collection: ^1.18.0
+
+dev_dependencies:
+  flutter_lints: ^3.0.2
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
