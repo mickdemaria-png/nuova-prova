@@ -1,0 +1,43 @@
+name: Build Flutter APK (Cloud)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.2'
+
+      - name: Generate missing platform folders
+        run: flutter create .
+
+      - name: Ensure RECORD_AUDIO permission
+        run: |
+          FILE=android/app/src/main/AndroidManifest.xml
+          if [ -f "$FILE" ]; then
+            if ! grep -q "RECORD_AUDIO" "$FILE"; then
+              awk '{
+                print $0
+                if($0 ~ /<manifest/ && !x){print "    <uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>"; x=1}
+              }' "$FILE" > "$FILE.tmp"
+              mv "$FILE.tmp" "$FILE"
+            fi
+          fi
+
+      - name: flutter pub get
+        run: flutter pub get
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
